@@ -1,6 +1,6 @@
 const express = require('express')
 
-const projectsDB  = require('../data/helpers/projectModel')
+const projectsDB = require('../data/helpers/projectModel')
 
 const router = express.Router()
 
@@ -11,7 +11,7 @@ router.post('/', validateProject, (req, res) => {
             res.status(201).json(project)
         })
         .catch(err => {
-            res.status(500).json({ errorMessage: "There has been an error making a new project.", "error": err })
+            res.status(500).json({ errorMessage: "There has been an error making a new project." })
         })
 })
 
@@ -21,25 +21,14 @@ router.get('/', (req, res) => {
         .then(projects => {
             res.status(200).json(projects)
         })
-        .catch(err => {
-            res.status(500).json({ errorMessage: "There has been an error fetching the projects", "error": err })
+        .catch(() => {
+            res.status(500).json({ errorMessage: "There has been an error fetching the projects" })
         })
 })
 
 // ============== GET PROJECT BY ID ==============
-router.get('/:id', validateProjectId, (req, res) => {
+router.get('/:id', validateProjectId ,(req, res) => {
     res.status(200).json(req.project)
-})
-
-// ============== GET PROJECTS ACTIONS ============== ✔✔✔✔✔✔✔✔✔
-router.get('/:id/actions', validateProjectId, (req, res) => {
-    projectsDB.getProjectActions(req.params.id)
-        .then(actions => {
-            res.status(200).json(actions)
-        })
-        .catch(err => {
-            res.status(500).json({ errorMessage: "There has been an error while getting the projects actions.", "error": err })
-        })
 })
 
 // ============== UPDATE PROJECT BY ID ==============
@@ -48,8 +37,8 @@ router.put('/:id', validateProjectId, validateProject, (req, res) => {
         .then(project => {
             res.status(200).json(project)
         })
-        .catch(err => {
-            res.status(500).json({ errorMessage: "There has been an error while trying to update the project.", "error": err })
+        .catch(() => {
+            res.status(500).json({ errorMessage: "There has been an error while trying to update the project." })
         })
 })
 
@@ -59,8 +48,19 @@ router.delete('/:id', validateProjectId, (req, res) => {
         .then(() => {
             res.status(200).json({ message: "Project deleted successfully." })
         })
-        .catch(err => {
-            res.status(500).json({ errorMessage: "There has been an error while deleting the project.", "error": err })
+        .catch(() => {
+            res.status(500).json({ errorMessage: "There has been an error while deleting the project." })
+        })
+})
+
+// ============== GET PROJECTS ACTIONS ============== ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+router.get('/:id/actions', validateProjectId, (req, res) => {
+    projectsDB.getProjectActions(req.params.id)
+        .then(actions => {
+            res.status(200).json(actions)
+        })
+        .catch(() => {
+            res.status(500).json({ errorMessage: "There has been an error while getting the projects actions." })
         })
 })
 
@@ -68,7 +68,7 @@ router.delete('/:id', validateProjectId, (req, res) => {
 // ============== MIDDLEWARE/validate project ==============
 
 function validateProjectId(req, res, next) {
-    db.get(req.params.id)
+    projectsDB.get(req.params.id)
         .then(project => {
             if(project) {
                 req.project = project
