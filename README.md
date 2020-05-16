@@ -39,7 +39,7 @@ Commit your code regularly and use descriptive messages. This helps both you (in
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your Team Lead.
 
 - [ ] Mention two parts of Express that you learned about this week.
-    1. I learned that 'express' is ike the 'react' of the backend. I learned about using express.Router and all about middleware.
+    1. I learned that 'express' is like the 'react' of the backend. I learned about using express.Router and all about middleware.
 
 
 - [ ] Describe Middleware?
@@ -56,7 +56,7 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] How can we partition our application into sub-applications?
     5. Routing can break an application into smaller parts. These smaller parts are accessable by visiting specific URLs to access specific routes.
-    
+
 
 ## Minimum Viable Product
 
