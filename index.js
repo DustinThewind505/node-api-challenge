@@ -15,11 +15,10 @@ Go code!
 */
 
 const express = require("express")
-
-
 const server = express()
-
 const PORT = 4444;
+
+const projectsRouter = require('./api/projectsRouter');
 
 server.use(express.json())
 server.use(logger)
@@ -34,6 +33,7 @@ function logger (req, res, next) {
             next();
 }
 
+server.use('/api/projects', projectsRouter);
 
 server.listen(PORT, () => {
     console.log(`\n *** server is running on localhost/${PORT} *** \n`)
