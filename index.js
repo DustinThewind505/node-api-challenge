@@ -15,6 +15,7 @@ Go code!
 */
 
 const express = require("express")
+const cors = require("cors");
 const server = express()
 const PORT = 4444;
 
@@ -22,15 +23,12 @@ const projectsRouter = require('./api/projectsRouter');
 const actionsRouter = require('./api/actionsRouter');
 
 server.use(express.json())
+server.use(cors())
 server.use(logger)
 
 
 function logger (req, res, next) {
-    console.log(
-        `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
-            'Origin'
-            )}`
-            )
+    console.log(`[${new Date().toISOString()}] ${req.method} to ${req.url}`);
             next();
 }
 
@@ -38,5 +36,5 @@ server.use('/api/projects', projectsRouter);
 server.use('/api/actions', actionsRouter);
 
 server.listen(PORT, () => {
-    console.log(`\n *** server is running on localhost/${PORT} *** \n`)
+    console.log(`\n\t\t\t\t\t *** server is running on localhost/${PORT} *** \n`)
 })

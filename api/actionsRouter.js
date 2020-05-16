@@ -5,16 +5,16 @@ const projectsDB = require('../data/helpers/projectModel')
 
 const router = express.Router()
 
-// ============== ADD ACTION ==============
-router.post('/', (req, res) => {
-    actionsDB.insert(req.body)
-        .then(action => {
-            res.status(201).json(action)
-        })
-        .catch(() => {
-            res.status(500).json({ errorMessage: "There was an error creating the action." })
-        })
-})
+// // ============== ADD ACTION ==============
+// router.post('/', (req, res) => {
+//     actionsDB.insert(req.body)
+//         .then(action => {
+//             res.status(201).json(action)
+//         })
+//         .catch(() => {
+//             res.status(500).json({ errorMessage: "There was an error creating the action." })
+//         })
+// })
 
 // ============== GET ALL ACTIONS ==============
 router.get('/', (req, res) => {
@@ -29,19 +29,27 @@ router.get('/', (req, res) => {
 
 // ============== GET ACTION BY ID ==============
 router.get('/:id', verifyActionId, (req, res) => {
-    res.status(200).json(req.action)
+    actionsDB.get(req.params.id)
+    .then((action) => {
+      res.status(200).json(action);
+    })
+    .catch(() => {
+      res.status(500).json({ message: "unable to retrieve this action" });
+    });
 })
 
 // ============== UPDATE ACTION ==============
-router.put('/:id', verifyAction, verifyActionId, (req, res) => {
+router.put("/:id", verifyAction, verifyActionId, (req, res) => {
     actionsDB.update(req.params.id, req.body)
-        .then(action => {
-            res.status(200).json(action)
-        })
-        .catch(() => {
-            res.status(500).json({ errorMessage: "There was an error updating this action." })
-        })
-})
+      .then((action) => {
+        res.status(200).json({ message: "success", action });
+      })
+      .catch(() => {
+        res
+          .status(500)
+          .json({ message: "there was an error while updating this action" });
+      });
+  });
 
 // ============== DELETE ACTION BY ID ==============
 router.delete('/:id', verifyActionId, (req, res) => {
@@ -58,7 +66,7 @@ router.delete('/:id', verifyActionId, (req, res) => {
 // ============== MIDDLEWARE/validate action ==============
 
 function verifyActionId (req, res, next) {
-    db.get(req.params.id)
+    actionsDB.get(req.params.id)
         .then(action => {
             if(!action) {
                 res.status(400).json({ errorMessage: "There was not an action found with this id" })
@@ -72,8 +80,6 @@ function verifyActionId (req, res, next) {
 function verifyAction (req, res, next) {
     if(!req.body) {
         res.status(400).json({ message: "missing action data" })
-    } else if(!req.body.project_id || !req.body.description || !req.body.notes) {
-        res.status(400).json({ message: "actions require a project id, description, and notes." })
     } else {
         projectsDB.get(req.params.project_id)
             .then(project => {
