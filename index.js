@@ -19,6 +19,7 @@ const server = express()
 const PORT = 4444;
 
 const projectsRouter = require('./api/projectsRouter');
+const actionsRouter = require('./api/actionsRouter');
 
 server.use(express.json())
 server.use(logger)
@@ -34,6 +35,7 @@ function logger (req, res, next) {
 }
 
 server.use('/api/projects', projectsRouter);
+server.use('/api/actions', actionsRouter);
 
 server.listen(PORT, () => {
     console.log(`\n *** server is running on localhost/${PORT} *** \n`)

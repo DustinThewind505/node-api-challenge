@@ -27,12 +27,12 @@ router.get('/', (req, res) => {
 })
 
 // ============== GET PROJECT BY ID ==============
-router.get('/:id', (req, res) => {
+router.get('/:id', validateProjectId, (req, res) => {
     res.status(200).json(req.project)
 })
 
 // ============== GET PROJECTS ACTIONS ============== ✔✔✔✔✔✔✔✔✔
-router.get('/:id/actions', (req, res) => {
+router.get('/:id/actions', validateProjectId, (req, res) => {
     projectsDB.getProjectActions(req.params.id)
         .then(actions => {
             res.status(200).json(actions)
@@ -43,7 +43,7 @@ router.get('/:id/actions', (req, res) => {
 })
 
 // ============== UPDATE PROJECT BY ID ==============
-router.put('/:id', validateProject, (req, res) => {
+router.put('/:id', validateProjectId, validateProject, (req, res) => {
     projectsDB.update(req.params.id, req.body)
         .then(project => {
             res.status(200).json(project)
@@ -54,7 +54,7 @@ router.put('/:id', validateProject, (req, res) => {
 })
 
 // ============== DELETE PROJECT BY ID ==============
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateProjectId, (req, res) => {
     projectsDB.remove(req.params.id)
         .then(() => {
             res.status(200).json({ message: "Project deleted successfully." })
@@ -66,6 +66,18 @@ router.delete('/:id', (req, res) => {
 
 
 // ============== MIDDLEWARE/validate project ==============
+
+function validateProjectId(req, res, next) {
+    db.get(req.params.id)
+        .then(project => {
+            if(project) {
+                req.project = project
+                next();
+            } else {
+                res.status(400).json({ errorMessage: "Could not find a project with that id." })
+            }
+        })
+}
 
 function validateProject(req, res, next) {
     if(!req.body) {
