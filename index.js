@@ -11,4 +11,30 @@ there is no data on that route, just write some code, you'll sort it out… don'
 I need this code, but don't know where, perhaps should make some middleware, don't worry, just hack it
 
 Go code!
+*** ====================== HELL YEAH LUIS!!!!! ====================== ***
 */
+
+const express = require("express")
+
+
+const server = express()
+
+const PORT = 4444;
+
+server.use(express.json())
+server.use(logger)
+
+
+function logger (req, res, next) {
+    console.log(
+        `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
+            'Origin'
+            )}`
+            )
+            next();
+}
+
+
+server.listen(PORT, () => {
+    console.log(`\n *** server is running on localhost/${PORT} *** \n`)
+})
